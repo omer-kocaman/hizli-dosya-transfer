@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+	<head>
+		<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<title>Hızlı Dosya Paylaşımı</title>
+
+				<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+				<style>
+					body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+					.container { border: 2px dashed #ccc; padding: 40px; width: 50%; margin: auto; border-radius: 10px; }
+					#upload-btn { margin-top: 20px; padding: 10px 20px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; font-weight: bold; }
+					#upload-btn:hover { background-color: #0056b3; }
+					#message { margin-top: 20px; font-weight: bold; }
+					#share-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; display: none; }
+					#short-link { font-size: 18px; color: #d63384; font-weight: bold; text-decoration: none; word-break: break-all; }
+					#short-link:hover { text-decoration: underline; }
+					canvas { margin-top: 15px; border: 1px solid #ddd; padding: 10px; border-radius: 10px; }
+
+					#progress-container { width: 100%; background-color: #f3f3f3; border-radius: 5px; margin-top: 15px; display: none; overflow: hidden; border: 1px solid #ccc; }
+					#progress-bar { height: 20px; width: 0%; background-color: #28a745; transition: width 0.5s ease; }
+
+					/* YENİ: Havalı Paylaş Butonu Tasarımı */
+					#share-btn { margin-top: 15px; padding: 10px 20px; cursor: pointer; background-color: #25D366; color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: bold; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+					#share-btn:hover { background-color: #1ebe57; }
+				</style>
+			</head>
+	<body>
+
+		<div class="container">
+			<h2>Dosyanı Seç ve Yükle</h2>
+			<p>
+				Dosyalar 24 saat sonra otomatik olarak silinecektir. <strong>(Maksimum 50 MB)</strong>
+			</p>
+
+			<input type="file" id="file-input">
+				<br>
+					<button id="upload-btn">Buluta Yükle</button>
+
+					<div id="progress-container">
+						<div id="progress-bar"></div>
+					</div>
+
+					<div id="message"></div>
+
+					<div id="share-section">
+						<p>
+							🔗 <strong>İndirme Linkin:</strong> <br>
+								<a id="short-link" href="#" target="_blank">Oluşturuluyor...</a>
+							</p>
+
+						<button id="share-btn">📤 Paylaş</button>
+
+						<p style="margin-top: 30px;">
+							📱 <strong>QR Kod ile Tarat:</strong>
+						</p>
+						<canvas id="qr-code"></canvas>
+					</div>
+				</div>
+
+		<script src="app.js"></script>
+	</body>
+</html>
