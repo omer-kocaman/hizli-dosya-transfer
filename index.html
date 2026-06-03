@@ -9,28 +9,46 @@
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
 				<style>
-					body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-					.container { border: 2px dashed #ccc; padding: 40px; width: 50%; margin: auto; border-radius: 10px; }
+					/* Genel Geçiş Efektleri */
+					body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; transition: background-color 0.3s, color 0.3s; background-color: #ffffff; color: #000000; }
+
+					/* Tema Butonu */
+					#theme-toggle { position: absolute; top: 20px; right: 20px; font-size: 24px; background: none; border: none; cursor: pointer; transition: transform 0.2s; }
+					#theme-toggle:hover { transform: scale(1.2); }
+
+					/* Kutu Tasarımı ve Sürükle-Bırak Efekti */
+					.container { border: 2px dashed #ccc; padding: 40px; width: 50%; margin: auto; border-radius: 10px; background-color: #ffffff; transition: all 0.3s; }
+					.container.dragover { background-color: #e9f5ff; border-color: #007bff; transform: scale(1.02); } /* Dosya sürüklenince büyü ve mavi ol */
+
 					#upload-btn { margin-top: 20px; padding: 10px 20px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; font-weight: bold; }
 					#upload-btn:hover { background-color: #0056b3; }
 					#message { margin-top: 20px; font-weight: bold; }
 					#share-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; display: none; }
 					#short-link { font-size: 18px; color: #d63384; font-weight: bold; text-decoration: none; word-break: break-all; }
 					#short-link:hover { text-decoration: underline; }
-					canvas { margin-top: 15px; border: 1px solid #ddd; padding: 10px; border-radius: 10px; }
+					canvas { margin-top: 15px; border: 1px solid #ddd; padding: 10px; border-radius: 10px; background-color: white; }
 
 					#progress-container { width: 100%; background-color: #f3f3f3; border-radius: 5px; margin-top: 15px; display: none; overflow: hidden; border: 1px solid #ccc; }
 					#progress-bar { height: 20px; width: 0%; background-color: #28a745; transition: width 0.5s ease; }
 
-					/* YENİ: Havalı Paylaş Butonu Tasarımı */
 					#share-btn { margin-top: 15px; padding: 10px 20px; cursor: pointer; background-color: #25D366; color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: bold; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 					#share-btn:hover { background-color: #1ebe57; }
+
+					/* --- KARANLIK MOD (DARK MODE) --- */
+					body.dark-mode { background-color: #121212; color: #e0e0e0; }
+					body.dark-mode .container { background-color: #1e1e1e; border-color: #444; }
+					body.dark-mode .container.dragover { background-color: #2a3b4c; border-color: #4da3ff; }
+					body.dark-mode #progress-container { background-color: #333; border-color: #555; }
+					body.dark-mode #share-section { border-top-color: #333; }
+					body.dark-mode a#short-link { color: #ff85c2; }
 				</style>
 			</head>
 	<body>
 
-		<div class="container">
-			<h2>Dosyanı Seç ve Yükle</h2>
+		<button id="theme-toggle" title="Temayı Değiştir">🌙</button>
+
+		<div class="container" id="drop-zone">
+			<h2>Dosyanı Seç veya Buraya Sürükle</h2>
 			<p>
 				Dosyalar 24 saat sonra otomatik olarak silinecektir. <strong>(Maksimum 50 MB)</strong>
 			</p>
