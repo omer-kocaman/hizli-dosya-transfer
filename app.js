@@ -3,16 +3,60 @@ const supabaseKey = 'BURAYA_KENDI_SUPABASE_ANON_KEY_SIFRENIZI_YAZIN';
 
 const supabaseIstemci = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-document.getElementById('upload-btn').addEventListener('click', async () => {
-    const fileInput = document.getElementById('file-input');
-    const messageDiv = document.getElementById('message');
-    const shareSection = document.getElementById('share-section');
-    const progressContainer = document.getElementById('progress-container');
-    const progressBar = document.getElementById('progress-bar');
-    const shareBtn = document.getElementById('share-btn');
+const fileInput = document.getElementById('file-input');
+const messageDiv = document.getElementById('message');
+const shareSection = document.getElementById('share-section');
+const progressContainer = document.getElementById('progress-container');
+const progressBar = document.getElementById('progress-bar');
+const shareBtn = document.getElementById('share-btn');
+const dropZone = document.getElementById('drop-zone');
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
 
+// Kullanıcının daha önceki tercihini hafızadan oku
+if (localStorage.getItem('theme') === 'dark') {
+    body.classList.add('dark-mode');
+    themeToggle.innerText = '☀️';
+}
+
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark'); // Hafızaya kaydet
+        themeToggle.innerText = '☀️';
+    } else {
+        localStorage.setItem('theme', 'light');
+        themeToggle.innerText = '🌙';
+    }
+});
+
+//surukle birak sistemi
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+});
+
+//dosya kutuya birakildiginda
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    
+    //birakilan dosyayi alip bizim gizli file-input a gonder
+    if (e.dataTransfer.files.length > 0) {
+        fileInput.files = e.dataTransfer.files;
+        messageDiv.style.color = "#007bff";
+        messageDiv.innerText = `📂 ${fileInput.files[0].name} seçildi. Yükle butonuna basabilirsiniz.`;
+    }
+});
+
+//buluta yükleme islemi
+document.getElementById('upload-btn').addEventListener('click', async () => {
     if (fileInput.files.length === 0) {
-        alert("Lütfen önce bir dosya seçin!");
+        alert("Lütfen önce bir dosya seçin veya sürükleyip bırakın!");
         return;
     }
 
@@ -30,7 +74,7 @@ document.getElementById('upload-btn').addEventListener('click', async () => {
 
     shareSection.style.display = "none";
     shareBtn.style.display = "none";
-    messageDiv.style.color = "blue";
+    messageDiv.style.color = "#007bff";
     messageDiv.innerText = "Buluta yükleniyor, lütfen bekleyin...";
     
     progressContainer.style.display = "block";
@@ -62,7 +106,7 @@ document.getElementById('upload-btn').addEventListener('click', async () => {
 
     const downloadUrl = publicUrlData.publicUrl;
 
-    messageDiv.style.color = "green";
+    messageDiv.style.color = "#28a745";
     messageDiv.innerHTML = `Başarıyla yüklendi! 🎉`;
 
     shareSection.style.display = "block";
@@ -75,10 +119,8 @@ document.getElementById('upload-btn').addEventListener('click', async () => {
         shortLinkElement.href = shortUrl;
         shortLinkElement.innerText = shortUrl;
 
-        // paylasma
         shareBtn.style.display = "inline-block";
         shareBtn.onclick = async () => {
-            // web api ile paylasma
             if (navigator.share) {
                 try {
                     await navigator.share({
@@ -89,9 +131,7 @@ document.getElementById('upload-btn').addEventListener('click', async () => {
                 } catch (err) {
                     console.log("Paylaşım menüsü kapatıldı.");
                 }
-            } 
-            // link kopyalama
-            else {
+            } else {
                 navigator.clipboard.writeText(shortUrl).then(() => {
                     const originalText = shareBtn.innerText;
                     shareBtn.innerText = "Link Kopyalandı! ✔";
